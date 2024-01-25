@@ -18,6 +18,10 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import InputBase from "@mui/material/InputBase";
+import styled from "styled-components";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 function createData(id, name, position, e_no, id_no, inv_code) {
   return {
@@ -87,7 +91,7 @@ const headCells = [
   },
   {
     id: "e_no",
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: "Employee No.",
   },
@@ -104,6 +108,54 @@ const headCells = [
     label: "Invitation Code",
   },
 ];
+
+function createString(length) {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+  "& .MuiInputBase-input": {
+    borderRadius: 4,
+    position: "relative",
+    backgroundColor: "#F3F6F9",
+    border: "1px solid",
+    borderColor: "#E0E3E7",
+    fontSize: 16,
+    width: "auto",
+    padding: "10px 12px",
+    // transition: theme.transitions.create([
+    //   "border-color",
+    //   "background-color",
+    //   "box-shadow",
+    // ]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:focus": {
+      boxShadow: `${alpha("#000000", 0.25)} 0 0 0 0.2rem`,
+      borderColor: "#000000",
+    },
+  },
+}));
 
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
@@ -161,11 +213,7 @@ function EnhancedTableToolbar(props) {
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
+          bgcolor: () => alpha("black", 0.25),
         }),
       }}
     >
@@ -216,6 +264,14 @@ export default function AccountTable() {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [newAccount, setNewAccount] = React.useState({
+    id: createString(2),
+    name: "",
+    position: "",
+    e_no: "",
+    id_no: "",
+    inv_code: createString(11),
+  });
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -294,9 +350,9 @@ export default function AccountTable() {
               rowCount={rows.length}
             />
             <TableBody>
+              {/* First row is for adding a new user */}
               <TableRow
                 hover
-                onClick={() => console.log("clicked")}
                 role="checkbox"
                 aria-checked={false}
                 tabIndex={-1}
@@ -304,12 +360,72 @@ export default function AccountTable() {
                 selected={false}
                 sx={{ cursor: "pointer" }}
               >
-                <TableCell>test</TableCell>
-                <TableCell align="right">test</TableCell>
-                <TableCell align="right">test</TableCell>
-                <TableCell align="right">test</TableCell>
-                <TableCell align="right">test</TableCell>
-                <TableCell align="right">test</TableCell>
+                <TableCell>
+                  <TextField
+                    type="text"
+                    variant="outlined"
+                    defaultValue="Name"
+                    onChange={(e) => {
+                      setNewAccount({ ...newAccount, name: e.target.value });
+                    }}
+                  />
+                  {/* <BootstrapInput defaultValue="Name" id="name" /> */}
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    type="text"
+                    variant="outlined"
+                    defaultValue="Position"
+                    onChange={(e) => {
+                      setNewAccount({
+                        ...newAccount,
+                        position: e.target.value,
+                      });
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    type="text"
+                    variant="outlined"
+                    defaultValue="Employee No."
+                    onChange={(e) => {
+                      setNewAccount({ ...newAccount, e_no: e.target.value });
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    type="text"
+                    variant="outlined"
+                    defaultValue="ID No."
+                    onChange={(e) => {
+                      setNewAccount({ ...newAccount, id_no: e.target.value });
+                    }}
+                  />
+                </TableCell>
+                <TableCell align="right">{newAccount.inv_code}</TableCell>
+
+                <TableCell align="right">
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      console.log(newAccount);
+                      rows.unshift(
+                        createData(
+                          newAccount.id,
+                          newAccount.name,
+                          newAccount.position,
+                          newAccount.e_no,
+                          newAccount.id_no,
+                          newAccount.inv_code
+                        )
+                      );
+                    }}
+                  >
+                    Save
+                  </Button>
+                </TableCell>
               </TableRow>
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
@@ -334,10 +450,10 @@ export default function AccountTable() {
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell align="right">{row.position}</TableCell>
-                    <TableCell align="right">{row.e_no}</TableCell>
-                    <TableCell align="right">{row.id_no}</TableCell>
-                    <TableCell align="right">{row.inv_code}</TableCell>
+                    <TableCell>{row.position}</TableCell>
+                    <TableCell>{row.e_no}</TableCell>
+                    <TableCell>{row.id_no}</TableCell>
+                    <TableCell>{row.inv_code}</TableCell>
                   </TableRow>
                 );
               })}
