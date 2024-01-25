@@ -4,7 +4,7 @@ import AccountTableTitle from './AccountTableTitle'
 import styled from "styled-components";
 
 const AccountContainer = styled.div`
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
 `;
 

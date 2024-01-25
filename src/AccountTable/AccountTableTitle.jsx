@@ -11,12 +11,17 @@ const SubTitle = styled.div`
     font-size: 20px;
 `;
 
+const TitleContainer = styled.div`
+    padding-top: 2em;
+    padding-bottom: 3em;
+`;
+
 const AccountTableTitle = () => {
   return (
-    <div>
+    <TitleContainer>
         <MainTitle>Account management</MainTitle>
         <SubTitle>Management-Tool</SubTitle>
-    </div>
+    </TitleContainer>
   )
 }
 

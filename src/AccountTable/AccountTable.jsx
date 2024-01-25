@@ -160,7 +160,15 @@ function EnhancedTableHead(props) {
           </TableCell>
         ))}
         <TableCell key="test" align="left" padding="none" sortDirection={false}>
-          <div>Extra Column</div>
+          <Button
+            variant="outlined"
+            sx={{ color: "#ED7D31" }}
+            onClick={() => {
+              console.log("todo: toggle first row visibility");
+            }}
+          >
+            New
+          </Button>
         </TableCell>
       </TableRow>
     </TableHead>
@@ -261,7 +269,7 @@ export default function AccountTable() {
       <Paper sx={{ width: "100%", mb: 2 }}>
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{ minWidth: 750, marginLeft: "2px" }}
             aria-labelledby="tableTitle"
             size="medium"
           >
@@ -288,7 +296,7 @@ export default function AccountTable() {
                   <TextField
                     type="text"
                     variant="outlined"
-                    defaultValue="Name"
+                    placeholder={newAccount.name && "Name"}
                     onChange={(e) => {
                       setNewAccount({ ...newAccount, name: e.target.value });
                     }}
@@ -299,7 +307,7 @@ export default function AccountTable() {
                   <TextField
                     type="text"
                     variant="outlined"
-                    defaultValue="Position"
+                    placeholder="Position"
                     onChange={(e) => {
                       setNewAccount({
                         ...newAccount,
@@ -312,7 +320,7 @@ export default function AccountTable() {
                   <TextField
                     type="text"
                     variant="outlined"
-                    defaultValue="Employee No."
+                    placeholder="Employee No."
                     onChange={(e) => {
                       setNewAccount({ ...newAccount, e_no: e.target.value });
                     }}
@@ -322,7 +330,7 @@ export default function AccountTable() {
                   <TextField
                     type="text"
                     variant="outlined"
-                    defaultValue="ID No."
+                    placeholder="ID No."
                     onChange={(e) => {
                       setNewAccount({ ...newAccount, id_no: e.target.value });
                     }}
@@ -354,6 +362,14 @@ export default function AccountTable() {
                           newAccount.inv_code
                         )
                       );
+                      setNewAccount({
+                        id: createString(2),
+                        name: "",
+                        position: "",
+                        e_no: "",
+                        id_no: "",
+                        inv_code: createString(11),
+                      });
                     }}
                   >
                     Save
@@ -379,13 +395,19 @@ export default function AccountTable() {
                       id={labelId}
                       scope="row"
                       padding="none"
-                      style={{fontWeight: 700}}
+                      style={{ fontWeight: 700 }}
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell style={{fontWeight: 700}}>{row.position}</TableCell>
-                    <TableCell style={{fontWeight: 700}}>{row.e_no}</TableCell>
-                    <TableCell style={{fontWeight: 700}}>{row.id_no}</TableCell>
+                    <TableCell style={{ fontWeight: 700 }}>
+                      {row.position}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 700 }}>
+                      {row.e_no}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 700 }}>
+                      {row.id_no}
+                    </TableCell>
                     <TableCell>
                       <InvCode>
                         {row.inv_code}
