@@ -1,6 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import { alpha } from "@mui/material/styles";
+
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,19 +10,16 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
+
 import { visuallyHidden } from "@mui/utils";
-import InputBase from "@mui/material/InputBase";
+
 import styled from "styled-components";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 function createData(id, name, position, e_no, id_no, inv_code) {
   return {
@@ -123,40 +120,10 @@ function createString(length) {
   return result;
 }
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
-  "& .MuiInputBase-input": {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: "#F3F6F9",
-    border: "1px solid",
-    borderColor: "#E0E3E7",
-    fontSize: 16,
-    width: "auto",
-    padding: "10px 12px",
-    // transition: theme.transitions.create([
-    //   "border-color",
-    //   "background-color",
-    //   "box-shadow",
-    // ]),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-    "&:focus": {
-      boxShadow: `${alpha("#000000", 0.25)} 0 0 0 0.2rem`,
-      borderColor: "#000000",
-    },
-  },
-}));
+const InvCode = styled.div`
+  color: #707070;
+  text-decoration: underline;
+`;
 
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
@@ -205,59 +172,8 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
 
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: () => alpha("black", 0.25),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Nutrition
-        </Typography>
-      )}
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-}
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
 
 export default function AccountTable() {
   const [order, setOrder] = React.useState("asc");
@@ -289,26 +205,6 @@ export default function AccountTable() {
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    console.log("new selected ", newSelected);
-    // setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -336,7 +232,7 @@ export default function AccountTable() {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -406,7 +302,17 @@ export default function AccountTable() {
                     }}
                   />
                 </TableCell>
-                <TableCell>{newAccount.inv_code}</TableCell>
+                <TableCell>
+                  <InvCode>
+                    {newAccount.inv_code}
+                    <ContentCopyIcon
+                      sx={{ color: "#707070" }}
+                      onClick={() => {
+                        navigator.clipboard.writeText(newAccount.inv_code);
+                      }}
+                    />
+                  </InvCode>
+                </TableCell>
 
                 <TableCell>
                   <Button
@@ -453,13 +359,28 @@ export default function AccountTable() {
                     <TableCell>{row.position}</TableCell>
                     <TableCell>{row.e_no}</TableCell>
                     <TableCell>{row.id_no}</TableCell>
-                    <TableCell>{row.inv_code}</TableCell>
+                    <TableCell>
+                      <InvCode>
+                        {row.inv_code}
+                        <ContentCopyIcon
+                          sx={{ color: "#707070" }}
+                          onClick={() => {
+                            navigator.clipboard.writeText(row.inv_code);
+                          }}
+                        />
+                      </InvCode>
+                    </TableCell>
                     <TableCell>
                       <DeleteForeverIcon
                         sx={{ color: "red" }}
-                        onClick={() => {rows.splice(rows.findIndex((i) => {
-                          return i.id === row.id;
-                      }), 1);}}
+                        onClick={() => {
+                          rows.splice(
+                            rows.findIndex((i) => {
+                              return i.id === row.id;
+                            }),
+                            1
+                          );
+                        }}
                       />
                     </TableCell>
                   </TableRow>
