@@ -189,6 +189,12 @@ export default function AccountTable() {
     id_no: "",
     inv_code: createString(11),
   });
+  const [searchValue, setSearchValue] = React.useState("");
+  let searchHandler = (e) => {
+    //convert input text to lower case
+    var lowerCase = e.target.value.toLowerCase();
+    setSearchValue(lowerCase);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -229,8 +235,28 @@ export default function AccountTable() {
     [order, orderBy, page, rowsPerPage]
   );
 
+  const searchResults = visibleRows.filter((el) => {
+    //if no input the return the original
+    if (searchValue === '') {
+        return el;
+    }
+    //return the item which contains the user input
+    else {
+        return el.name.toLowerCase().includes(searchValue)
+    }
+})
+
   return (
     <Box sx={{ width: "100%" }}>
+      <div className="search">
+        <TextField
+          id="outlined-basic"
+          onChange={searchHandler}
+          variant="outlined"
+          fullWidth
+          label="Search..."
+        />
+      </div>
       <Paper sx={{ width: "100%", mb: 2 }}>
 
         <TableContainer>
@@ -334,7 +360,7 @@ export default function AccountTable() {
                   </Button>
                 </TableCell>
               </TableRow>
-              {visibleRows.map((row, index) => {
+              {searchResults.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
