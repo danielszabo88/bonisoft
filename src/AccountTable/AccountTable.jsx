@@ -296,7 +296,7 @@ export default function AccountTable() {
                   <TextField
                     type="text"
                     variant="outlined"
-                    placeholder={newAccount.name && "Name"}
+                    placeholder="Name"
                     onChange={(e) => {
                       setNewAccount({ ...newAccount, name: e.target.value });
                     }}
