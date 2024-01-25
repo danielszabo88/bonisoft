@@ -78,7 +78,7 @@ const headCells = [
   {
     id: "name",
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: "Name",
   },
   {
@@ -262,7 +262,7 @@ export default function AccountTable() {
           id="outlined-basic"
           onChange={searchHandler}
           variant="outlined"
-          fullWidth
+          sx={{ width: "40%" }}
           label="Search..."
         />
       </SearchBarContainer>
@@ -394,7 +394,6 @@ export default function AccountTable() {
                       component="th"
                       id={labelId}
                       scope="row"
-                      padding="none"
                       style={{ fontWeight: 700 }}
                     >
                       {row.name}
