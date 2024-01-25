@@ -125,6 +125,10 @@ const InvCode = styled.div`
   text-decoration: underline;
 `;
 
+const SearchBarContainer = styled.div`
+  padding: 1em;
+  background-color: white;
+`;
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
@@ -171,9 +175,6 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
-
-
-
 
 export default function AccountTable() {
   const [order, setOrder] = React.useState("asc");
@@ -237,18 +238,18 @@ export default function AccountTable() {
 
   const searchResults = visibleRows.filter((el) => {
     //if no input the return the original
-    if (searchValue === '') {
-        return el;
+    if (searchValue === "") {
+      return el;
     }
     //return the item which contains the user input
     else {
-        return el.name.toLowerCase().includes(searchValue)
+      return el.name.toLowerCase().includes(searchValue);
     }
-})
+  });
 
   return (
     <Box sx={{ width: "100%" }}>
-      <div className="search">
+      <SearchBarContainer>
         <TextField
           id="outlined-basic"
           onChange={searchHandler}
@@ -256,9 +257,8 @@ export default function AccountTable() {
           fullWidth
           label="Search..."
         />
-      </div>
+      </SearchBarContainer>
       <Paper sx={{ width: "100%", mb: 2 }}>
-
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -379,12 +379,13 @@ export default function AccountTable() {
                       id={labelId}
                       scope="row"
                       padding="none"
+                      style={{fontWeight: 700}}
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell>{row.position}</TableCell>
-                    <TableCell>{row.e_no}</TableCell>
-                    <TableCell>{row.id_no}</TableCell>
+                    <TableCell style={{fontWeight: 700}}>{row.position}</TableCell>
+                    <TableCell style={{fontWeight: 700}}>{row.e_no}</TableCell>
+                    <TableCell style={{fontWeight: 700}}>{row.id_no}</TableCell>
                     <TableCell>
                       <InvCode>
                         {row.inv_code}

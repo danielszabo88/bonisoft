@@ -1,12 +1,19 @@
 import React from 'react'
 import AccountTable from './AccountTable'
+import AccountTableTitle from './AccountTableTitle'
+import styled from "styled-components";
+
+const AccountContainer = styled.div`
+    width: 80%;
+    margin: 0 auto;
+`;
 
 const AccountMgmt = () => {
   return (
-    <div>
-        <div>Account Management</div>
+    <AccountContainer>
+        <AccountTableTitle/>
         <AccountTable/>
-    </div>
+    </AccountContainer>
   )
 }
 
