@@ -22,6 +22,7 @@ import InputBase from "@mui/material/InputBase";
 import styled from "styled-components";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 function createData(id, name, position, e_no, id_no, inv_code) {
   return {
@@ -304,7 +305,8 @@ export default function AccountTable() {
         selected.slice(selectedIndex + 1)
       );
     }
-    setSelected(newSelected);
+    console.log("new selected ", newSelected);
+    // setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -404,13 +406,12 @@ export default function AccountTable() {
                     }}
                   />
                 </TableCell>
-                <TableCell align="right">{newAccount.inv_code}</TableCell>
+                <TableCell>{newAccount.inv_code}</TableCell>
 
-                <TableCell align="right">
+                <TableCell>
                   <Button
                     variant="outlined"
                     onClick={() => {
-                      console.log(newAccount);
                       rows.unshift(
                         createData(
                           newAccount.id,
@@ -434,7 +435,6 @@ export default function AccountTable() {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -454,6 +454,14 @@ export default function AccountTable() {
                     <TableCell>{row.e_no}</TableCell>
                     <TableCell>{row.id_no}</TableCell>
                     <TableCell>{row.inv_code}</TableCell>
+                    <TableCell>
+                      <DeleteForeverIcon
+                        sx={{ color: "red" }}
+                        onClick={() => {rows.splice(rows.findIndex((i) => {
+                          return i.id === row.id;
+                      }), 1);}}
+                      />
+                    </TableCell>
                   </TableRow>
                 );
               })}
